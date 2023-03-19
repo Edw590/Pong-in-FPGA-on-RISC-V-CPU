@@ -41,35 +41,17 @@ int compare_str(char *str1, char *str2, int str_size) {
 
 int main()
 {
-  //init uart
-  uart_init(UART_BASE,FREQ/BAUD);
+    //init uart
+    uart_init(UART_BASE,FREQ/BAUD);
 
-  //test puts
-  uart_puts("\n\n\nHello world!\n\n\n");
+    uart_puts("//------------------------\\\\\n");
 
-  //test printf with floats 
-  printf("Value of Pi = %f\n\n", 3.1415);
 
-  //test file send
-  char *sendfile = malloc(1000);
-  int send_file_size = 0;
-  send_file_size = string_copy(sendfile, send_string);
-  uart_sendfile("Sendfile.txt", send_file_size, sendfile);
 
-  //test file receive
-  char *recvfile = malloc(10000);
-  int file_size = 0;
-  file_size = uart_recvfile("Sendfile.txt", recvfile);
 
-  //compare files
-  if (compare_str(sendfile, recvfile, send_file_size)) {
-      printf("FAILURE: Send and received file differ!\n");
-  } else {
-      printf("SUCCESS: Send and received file match!\n");
-  }
 
-  free(sendfile);
-  free(recvfile);
 
-  uart_finish();
+    uart_puts("\\\\------------------------//\n");
+
+    uart_finish();
 }
