@@ -36,7 +36,7 @@ INIT_MEM ?=1
 #PERIPHERAL LIST
 #must match respective submodule CORE_NAME in the core.mk file of the submodule
 #PERIPHERALS:=UART
-PERIPHERALS ?=UART
+PERIPHERALS ?=UART GPIO
 
 #RISC-V HARD MULTIPLIER AND DIVIDER INSTRUCTIONS
 USE_MUL_DIV ?=1
@@ -63,6 +63,7 @@ DOC ?= pb
 
 #IOB LIBRARY
 UART_HW_DIR:=$(UART_DIR)/hardware
+GPIO_HW_DIR:=$(GPIO_DIR)/hardware
 
 ####################################################################
 # DERIVED FROM PRIMARY PARAMETERS: DO NOT CHANGE BELOW THIS POINT
@@ -88,6 +89,7 @@ UART_DIR=$(ROOT_DIR)/submodules/UART
 LIB_DIR=$(ROOT_DIR)/submodules/LIB
 MEM_DIR=$(ROOT_DIR)/submodules/MEM
 AXI_DIR=$(ROOT_DIR)/submodules/AXI
+GPIO_DIR=$(ROOT_DIR)/submodules/GPIO
 
 #sw paths
 SW_DIR:=$(ROOT_DIR)/software

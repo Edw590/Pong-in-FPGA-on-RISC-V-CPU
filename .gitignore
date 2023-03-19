@@ -1,6 +1,8 @@
 #TOP
 #nothing to ignore
 
+.vscode/*
+
 #SOFTWARE
 software/periphs.h
 

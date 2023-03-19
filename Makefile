@@ -78,7 +78,7 @@ sim-debug:
 # BUILD, LOAD AND RUN ON FPGA BOARD
 #
 #default board running locally or remotely
-BOARD ?=CYCLONEV-GT-DK
+BOARD ?=BASYS3
 BOARD_DIR =$(shell find hardware -name $(BOARD))
 #default baud and system clock freq for boards
 BOARD_BAUD = 115200
@@ -168,6 +168,7 @@ test: test-clean test-pc-emul test-sim test-fpga test-doc
 test-clean: test-pc-emul-clean test-sim-clean test-fpga-clean test-doc-clean
 
 debug:
+	@echo $(GPIO_DIR)
 	@echo $(UART_DIR)
 	@echo $(CACHE_DIR)
 
