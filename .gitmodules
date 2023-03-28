@@ -21,4 +21,4 @@
 	url = git@github.com:IObundle/iob-gpio.git
 [submodule "submodules/VGA"]
 	path = submodules/VGA
-	url = git@github.com:DanielProanoGuevara/iob-vga.git
+	url = git@github.com:Edw590/iob-vga.git
