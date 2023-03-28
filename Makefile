@@ -62,6 +62,8 @@ sim-build:
 sim-run: sim-build
 	make -C $(SIM_DIR) run
 
+sim-clean-run: sim-clean sim-run
+
 sim-waves:
 	make -C $(SIM_DIR) waves
 
@@ -97,6 +99,10 @@ fpga-run: fpga-build
 
 fpga-clean: fw-clean
 	make -C $(BOARD_DIR) clean
+
+fpga-clean-run: fpga-clean fpga-run
+
+fpga-clean-build: fpga-clean fpga-build
 
 fpga-veryclean:
 	make -C $(BOARD_DIR) veryclean

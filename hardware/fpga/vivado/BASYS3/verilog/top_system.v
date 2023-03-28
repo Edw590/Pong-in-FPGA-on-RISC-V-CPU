@@ -7,15 +7,26 @@ module top_system(
 
 	          //uart
 	          output        uart_txd,
-	          input         uart_rxd
-		  );
+	          input         uart_rxd,
+
+            //VGA
+            output 	   v_sync,
+            output 	   h_sync,
+            output [3:0] Red,
+            output [3:0] Green,
+            output [3:0] Blue
+            );
+      
+         wire [9:0] 	   pixel_x;
+         wire [9:0] 	   pixel_y;
+         wire [11:0] 	   rgb;
 
    //
    // RESET MANAGEMENT
    //
 
    //system reset
-
+         
    wire                         sys_rst;
 
    reg [15:0] 			rst_cnt;
@@ -46,7 +57,17 @@ module top_system(
       .uart_txd      (uart_txd),
       .uart_rxd      (uart_rxd),
       .uart_rts      (),
-      .uart_cts      (1'b1)
+      .uart_cts      (1'b1),
+
+      //VGA
+      .rgb           (rgb),
+      .v_sync        (v_sync),
+      .h_sync        (h_sync),
+      .Red           (Red),
+      .Green         (Green),
+      .Blue          (Blue),
+      .pixel_x       (pixel_x),
+      .pixel_y       (pixel_y)
       );
 
 endmodule

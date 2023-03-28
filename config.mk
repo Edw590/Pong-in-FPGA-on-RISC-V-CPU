@@ -36,7 +36,8 @@ INIT_MEM ?=1
 #PERIPHERAL LIST
 #must match respective submodule CORE_NAME in the core.mk file of the submodule
 #PERIPHERALS:=UART
-PERIPHERALS ?=UART
+PERIPHERALS ?=UART VGA
+# Don't set VGA as the last peripheral - will cause a bug in the compilation (repeated declarations in system.v)
 
 #RISC-V HARD MULTIPLIER AND DIVIDER INSTRUCTIONS
 USE_MUL_DIV ?=1
@@ -63,6 +64,8 @@ DOC ?= pb
 
 #IOB LIBRARY
 UART_HW_DIR:=$(UART_DIR)/hardware
+GPIO_HW_DIR:=$(GPIO_DIR)/hardware
+VGA_HW_DIR:=$(VGA_DIR)/hardware
 
 ####################################################################
 # DERIVED FROM PRIMARY PARAMETERS: DO NOT CHANGE BELOW THIS POINT
@@ -88,6 +91,8 @@ UART_DIR=$(ROOT_DIR)/submodules/UART
 LIB_DIR=$(ROOT_DIR)/submodules/LIB
 MEM_DIR=$(ROOT_DIR)/submodules/MEM
 AXI_DIR=$(ROOT_DIR)/submodules/AXI
+GPIO_DIR=$(ROOT_DIR)/submodules/GPIO
+VGA_DIR=$(ROOT_DIR)/submodules/VGA
 
 #sw paths
 SW_DIR:=$(ROOT_DIR)/software
