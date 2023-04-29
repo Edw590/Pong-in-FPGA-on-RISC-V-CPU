@@ -65,3 +65,7 @@ set_property PACKAGE_PIN P19 [get_ports h_sync]
 	set_property IOSTANDARD LVCMOS33 [get_ports h_sync]
 set_property PACKAGE_PIN R19 [get_ports v_sync]						
 	set_property IOSTANDARD LVCMOS33 [get_ports v_sync]
+
+## Switches Interface
+set_property PACKAGE_PIN V17 [get_ports {im_sw_input}]
+  set_property IOSTANDARD LVCMOS33 [get_ports {im_sw_input}]

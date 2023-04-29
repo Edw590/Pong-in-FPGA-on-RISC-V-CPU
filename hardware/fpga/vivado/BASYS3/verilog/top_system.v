@@ -9,12 +9,15 @@ module top_system(
 	          output        uart_txd,
 	          input         uart_rxd,
 
-            //VGA
+            // VGA
             output 	   v_sync,
             output 	   h_sync,
             output [3:0] Red,
             output [3:0] Green,
-            output [3:0] Blue
+            output [3:0] Blue,
+
+            // IM
+	          input         im_sw_input
             );
       
          wire [9:0] 	   pixel_x;
@@ -67,7 +70,13 @@ module top_system(
       .Green         (Green),
       .Blue          (Blue),
       .pixel_x       (pixel_x),
-      .pixel_y       (pixel_y)
+      .pixel_y       (pixel_y),
+
+      //IM
+      .im_pixel_x        (pixel_x),
+      .im_pixel_y        (pixel_y),
+      .im_rgb            (rgb),
+      .im_sw_input       (im_sw_input)
       );
 
 endmodule

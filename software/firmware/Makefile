@@ -15,6 +15,9 @@ include $(UART_DIR)/software/embedded/embedded.mk
 #VGA
 include $(VGA_DIR)/software/embedded/embedded.mk
 
+#IM
+include $(IM_DIR)/software/embedded/embedded.mk
+
 #HEADERS
 HDR+=periphs.h
 

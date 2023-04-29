@@ -1,6 +1,7 @@
 #include "system.h"
 #include "periphs.h"
 #include "iob-uart.h"
+#include "iob-im.h"
 #include "printf.h"
 
 char *send_string = "Sending this string as a file to console.\n"
@@ -39,10 +40,40 @@ int compare_str(char *str1, char *str2, int str_size) {
     return 0;
 }
 
+struct RGB {
+    int r:4;
+    int g:4;
+    int b:4;
+} __attribute__((packed));
+
 int main() {
     uart_init(UART_BASE,FREQ/BAUD); //init uart
     uart_puts("//------------------------\\\\\n");
 
+    im_init(IM_BASE);
+
+    int i = 306400;
+    //while (true) {
+        //im_set_ball_loc(i);
+
+        
+    //}
+    
+    /*int color = 0;
+    while (true) {
+        for (int addr = 0; addr < 614400; addr++) {
+            
+            im_set_ball_loc(color);
+            //im_set_barl_loc(i);
+            //im_set_barr_loc(i);
+            
+            if (4096 == color) {
+                color = 0;
+            } else {
+                color++;
+            }
+        }
+    }*/
 
 
     uart_puts("\\\\------------------------//\n");

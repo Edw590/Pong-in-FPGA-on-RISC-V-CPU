@@ -30,6 +30,9 @@ include $(UART_DIR)/hardware/hardware.mk
 #VGA
 include $(VGA_DIR)/hardware/hardware.mk
 
+#IM
+include $(IM_DIR)/hardware/hardware.mk
+
 
 #HARDWARE PATHS
 INC_DIR:=$(HW_DIR)/include
