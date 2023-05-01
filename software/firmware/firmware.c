@@ -46,18 +46,49 @@ struct RGB {
     int b:4;
 } __attribute__((packed));
 
+void setCoords(int object, int x, int y) {
+    if (0 == object) {
+        im_set_ball_loc(x | (y << 10));
+    } else if (1 == object) {
+        im_set_barl_loc(x | (y << 10));
+    } else if (2 == object) {
+        im_set_barr_loc(x | (y << 10));
+    }
+}
+
 int main() {
     uart_init(UART_BASE,FREQ/BAUD); //init uart
     uart_puts("//------------------------\\\\\n");
 
     im_init(IM_BASE);
 
-    int i = 306400;
-    //while (true) {
-        //im_set_ball_loc(i);
+    int prev_sw_state = im_get_sw_input();
 
-        
-    //}
+    int ball_x = 320;
+    int ball_y = 239;
+    setCoords(0, ball_x, ball_y);
+    int barl_x = 20;
+    int barl_y = 239;
+    setCoords(1, barl_x, barl_y);
+    int barr_x = 620;
+    int barr_y = 239;
+    setCoords(2, barr_x, barr_y);
+    
+    while (true) {
+        if (prev_sw_state != im_get_sw_input()) {
+            prev_sw_state = im_get_sw_input();
+
+            ball_x++;
+            ball_y++;
+            setCoords(0, ball_x, ball_y);
+            barl_x++;
+            barl_y++;
+            setCoords(1, barl_x, barl_y);
+            barr_x++;
+            barr_y++;
+            setCoords(2, barr_x, barr_y);
+        }
+    }
     
     /*int color = 0;
     while (true) {
