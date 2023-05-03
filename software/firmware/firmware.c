@@ -115,15 +115,9 @@ int main() {
         if (prev_sw_state != im_get_sw_input()) {
             prev_sw_state = im_get_sw_input();
 
-            ball_x++;
-            ball_y++;
-            setCoords(BALL_INFO, ball_x, ball_y);
-            barl_x++;
-            barl_y++;
-            setCoords(BARL_INFO, barl_x, barl_y);
-            barr_x++;
-            barr_y++;
-            setCoords(BARR_INFO, barr_x, barr_y);
+            setCoords(BALL_INFO, objs[BALL_INFO].x+1, objs[BALL_INFO].y+1);
+            setCoords(BARL_INFO, objs[BARL_INFO].x+1, objs[BARL_INFO].y+1);
+            setCoords(BARR_INFO, objs[BARR_INFO].x+1, objs[BARR_INFO].y+1);
         }
     }
     
