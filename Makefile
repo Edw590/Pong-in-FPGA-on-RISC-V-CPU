@@ -1,4 +1,4 @@
-SHELL = /bin/bash
+SHELL = bash
 export 
 
 #run on external memory implies DDR use
@@ -62,6 +62,8 @@ sim-build:
 sim-run: sim-build
 	make -C $(SIM_DIR) run
 
+sim-clean-run: sim-clean sim-run
+
 sim-waves:
 	make -C $(SIM_DIR) waves
 
@@ -78,7 +80,7 @@ sim-debug:
 # BUILD, LOAD AND RUN ON FPGA BOARD
 #
 #default board running locally or remotely
-BOARD ?=BASYS3
+BOARD ?=CYCLONEV-GT-DK
 BOARD_DIR =$(shell find hardware -name $(BOARD))
 #default baud and system clock freq for boards
 BOARD_BAUD = 115200
@@ -97,6 +99,10 @@ fpga-run: fpga-build
 
 fpga-clean: fw-clean
 	make -C $(BOARD_DIR) clean
+
+fpga-clean-run: fpga-clean fpga-run
+
+fpga-clean-build: fpga-clean fpga-build
 
 fpga-veryclean:
 	make -C $(BOARD_DIR) veryclean
@@ -168,7 +174,6 @@ test: test-clean test-pc-emul test-sim test-fpga test-doc
 test-clean: test-pc-emul-clean test-sim-clean test-fpga-clean test-doc-clean
 
 debug:
-	@echo $(GPIO_DIR)
 	@echo $(UART_DIR)
 	@echo $(CACHE_DIR)
 

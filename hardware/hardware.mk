@@ -27,8 +27,11 @@ include $(CACHE_DIR)/hardware/hardware.mk
 #UART
 include $(UART_DIR)/hardware/hardware.mk
 
-#GPIO
-include $(GPIO_DIR)/hardware/hardware.mk
+#VGA
+include $(VGA_DIR)/hardware/hardware.mk
+
+#IM
+include $(IM_DIR)/hardware/hardware.mk
 
 
 #HARDWARE PATHS
