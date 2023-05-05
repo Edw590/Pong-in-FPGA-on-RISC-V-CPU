@@ -29,10 +29,11 @@ module iob_im # (
    //BLOCK Register File & Configuration control and status register file.
    `include "iob_im_swreg_gen.vh"
    
-   localparam BALL_X_LEN = 7;
-   localparam BALL_Y_LEN = BALL_X_LEN;
-   localparam BAR_X_LEN = 3;
-   localparam BAR_Y_LEN = 20;
+   // HLEN == Half Length (total length desired divided by 2)
+   localparam BALL_X_HLEN = 7;
+   localparam BALL_Y_HLEN = BALL_X_HLEN;
+   localparam BAR_X_HLEN = 3;
+   localparam BAR_Y_HLEN = 20;
    localparam MASK_X = 32'b00000000000000000000001111111111;
    localparam MASK_Y = 32'b00000000000011111111110000000000;
 
@@ -89,9 +90,9 @@ module iob_im # (
    assign barr_y = (IM_BARR_LOC & MASK_Y) >> 10;
 
    // White when pixel is in the ball or bars, black otherwise.
-   assign rgb = (im_pixel_x >= ball_x - BALL_X_LEN && im_pixel_x <= ball_x + BALL_X_LEN) && (im_pixel_y >= ball_y - BALL_Y_LEN && im_pixel_y <= ball_y + BALL_Y_LEN) ||
-                (im_pixel_x >= barr_x - BAR_X_LEN && im_pixel_x <= barr_x + BAR_X_LEN) && (im_pixel_y >= barr_y - BAR_Y_LEN && im_pixel_y <= barr_y + BAR_Y_LEN) ||
-                (im_pixel_x >= barl_x - BAR_X_LEN && im_pixel_x <= barl_x + BAR_X_LEN) && (im_pixel_y >= barl_y - BAR_Y_LEN && im_pixel_y <= barl_y + BAR_Y_LEN)
+   assign rgb = (im_pixel_x >= ball_x - BALL_X_HLEN && im_pixel_x <= ball_x + BALL_X_HLEN) && (im_pixel_y >= ball_y - BALL_Y_HLEN && im_pixel_y <= ball_y + BALL_Y_HLEN) ||
+                (im_pixel_x >= barr_x - BAR_X_HLEN && im_pixel_x <= barr_x + BAR_X_HLEN) && (im_pixel_y >= barr_y - BAR_Y_HLEN && im_pixel_y <= barr_y + BAR_Y_HLEN) ||
+                (im_pixel_x >= barl_x - BAR_X_HLEN && im_pixel_x <= barl_x + BAR_X_HLEN) && (im_pixel_y >= barl_y - BAR_Y_HLEN && im_pixel_y <= barl_y + BAR_Y_HLEN)
                 ? 12'b111111111111 : 12'b0;
 
    // Read Switch

@@ -10,7 +10,7 @@ struct ObjInfo balr_info = {0};
 struct ObjInfo barr_info = {0};
 
 int main() {
-	uart_init(UART_BASE,FREQ/BAUD); //init uart
+	uart_init(UART_BASE,FREQ/BAUD);
 	uart_puts("//------------------------\\\\\n");
 
 	im_init(IM_BASE);

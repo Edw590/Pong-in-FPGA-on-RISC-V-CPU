@@ -1,10 +1,11 @@
 #include "iob-im.h"
 #include "GameUtils.h"
 
-#define BALL_X_LEN 7
-#define BALL_Y_LEN BALL_X_LEN
-#define BAR_X_LEN 3
-#define BAR_Y_LEN 20
+// Must be the same as in iob-im.v (HL == Half Length)
+#define BALL_X_HLEN 7
+#define BALL_Y_HLEN BALL_X_HLEN
+#define BAR_X_HLEN 3
+#define BAR_Y_HLEN 20
 
 #define OBJ_BALL 0
 #define OBJ_BARL 1
@@ -24,30 +25,30 @@ void prepareObjs(struct ObjInfo *ball_info, struct ObjInfo *balr_info, struct Ob
 
 void setCoords(struct ObjInfo *obj_info, int x, int y) {
 	int what_obj = (*obj_info).what_obj;
-	int obj_x_len = 0;
-	int obj_y_len = 0;
+	int obj_x_hlen = 0;
+	int obj_y_hlen = 0;
 	
 	if (OBJ_BALL == what_obj) {
-		obj_x_len = BALL_X_LEN;
-		obj_y_len = BALL_Y_LEN;
+		obj_x_hlen = BALL_X_HLEN;
+		obj_y_hlen = BALL_Y_HLEN;
 	} else {
-		obj_x_len = BAR_X_LEN;
-		obj_y_len = BAR_Y_LEN;
+		obj_x_hlen = BAR_X_HLEN;
+		obj_y_hlen = BAR_Y_HLEN;
 	}
 	
 	int new_x = 0;
 	int new_y = 0;
 
-	if (x - obj_x_len < 0) {
+	if (x - obj_x_hlen < 0) {
 		new_x = 0;
-	} else if (x + obj_x_len > MAX_COORD_X) {
+	} else if (x + obj_x_hlen > MAX_COORD_X) {
 		new_x = MAX_COORD_X;
 	} else {
 		new_x = x;
 	}
-	if (y - obj_y_len < 0) {
+	if (y - obj_y_hlen < 0) {
 		new_y = 0;
-	} else if (y + obj_y_len > MAX_COORD_Y) {
+	} else if (y + obj_y_hlen > MAX_COORD_Y) {
 		new_y = MAX_COORD_Y;
 	} else {
 		new_y = y;
