@@ -18,6 +18,10 @@ software/*/*
 !software/firmware/firmware.c
 !software/firmware/firmware.S
 
+# Pong-specific files
+!software/firmware/GameUtils.c
+!software/firmware/GameUtils.h
+
 !software/console/console
 
 #HARDWARE

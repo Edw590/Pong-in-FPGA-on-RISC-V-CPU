@@ -33,17 +33,18 @@ module iob_im # (
    localparam BALL_Y_LEN = BALL_X_LEN;
    localparam BAR_X_LEN = 3;
    localparam BAR_Y_LEN = 20;
+   localparam MASK_X = 32'b00000000000000000000001111111111;
+   localparam MASK_Y = 32'b00000000000011111111110000000000;
 
    reg [12-1:0] rgb;
-   reg [32-1:0] curr_vec_pos;
-   reg [32-1:0] im_ball_x;
-   reg [32-1:0] im_ball_y;
-   reg [32-1:0] im_barl_x;
-   reg [32-1:0] im_barl_y;
-   reg [32-1:0] im_barr_x;
-   reg [32-1:0] im_barr_y;
+   reg [32-1:0] ball_x;
+   reg [32-1:0] ball_y;
+   reg [32-1:0] barl_x;
+   reg [32-1:0] barl_y;
+   reg [32-1:0] barr_x;
+   reg [32-1:0] barr_y;
 
-   // SWRegs   
+   // SWRegs
    `IOB_WIRE(IM_BALL_LOC, 32)
    iob_reg #(.DATA_W(32))
    ball_loc (
@@ -77,30 +78,21 @@ module iob_im # (
       .data_out   (IM_BARR_LOC)
    );
 
-   //assign IM_BARR_LOC_wdata = 154560;
-   //assign IM_BALL_LOC_wdata = 154560;
-   //                   32'bxxxxxxxxxx_xxxxxxxxxx;
-   //assign IM_BALL_LOC = 154560;
-   //assign IM_BALL_LOC = 1281;
-   //assign IM_BALL_LOC = 307840;
-
-   assign curr_vec_pos = 640*im_pixel_y + im_pixel_x;
-
-   // X stored in the first 10 bits of _LOC registers, Y stored in the next 10 bits.
-   assign im_ball_x =  IM_BALL_LOC & 32'b00000000000000000000001111111111;
-   assign im_ball_y = (IM_BALL_LOC & 32'b00000000000011111111110000000000) >> 10;
+   // To know the format of the _LOC registers, check the ObjInfo struct in GameUtils.h
+   assign ball_x =  IM_BALL_LOC & MASK_X;
+   assign ball_y = (IM_BALL_LOC & MASK_Y) >> 10;
    
-   assign im_barl_x =  IM_BARL_LOC & 32'b00000000000000000000001111111111;
-   assign im_barl_y = (IM_BARL_LOC & 32'b00000000000011111111110000000000) >> 10;
+   assign barl_x =  IM_BARL_LOC & MASK_X;
+   assign barl_y = (IM_BARL_LOC & MASK_Y) >> 10;
    
-   assign im_barr_x =  IM_BARR_LOC & 32'b00000000000000000000001111111111;
-   assign im_barr_y = (IM_BARR_LOC & 32'b00000000000011111111110000000000) >> 10;
+   assign barr_x =  IM_BARR_LOC & MASK_X;
+   assign barr_y = (IM_BARR_LOC & MASK_Y) >> 10;
 
-   assign rgb = (im_pixel_x >= im_ball_x - BALL_X_LEN && im_pixel_x <= im_ball_x + BALL_X_LEN) && (im_pixel_y >= im_ball_y - BALL_Y_LEN && im_pixel_y <= im_ball_y + BALL_Y_LEN) ||
-                (im_pixel_x >= im_barr_x - BAR_X_LEN && im_pixel_x <= im_barr_x + BAR_X_LEN) && (im_pixel_y >= im_barr_y - BAR_Y_LEN && im_pixel_y <= im_barr_y + BAR_Y_LEN) ||
-                (im_pixel_x >= im_barl_x - BAR_X_LEN && im_pixel_x <= im_barl_x + BAR_X_LEN) && (im_pixel_y >= im_barl_y - BAR_Y_LEN && im_pixel_y <= im_barl_y + BAR_Y_LEN)
+   // White when pixel is in the ball or bars, black otherwise.
+   assign rgb = (im_pixel_x >= ball_x - BALL_X_LEN && im_pixel_x <= ball_x + BALL_X_LEN) && (im_pixel_y >= ball_y - BALL_Y_LEN && im_pixel_y <= ball_y + BALL_Y_LEN) ||
+                (im_pixel_x >= barr_x - BAR_X_LEN && im_pixel_x <= barr_x + BAR_X_LEN) && (im_pixel_y >= barr_y - BAR_Y_LEN && im_pixel_y <= barr_y + BAR_Y_LEN) ||
+                (im_pixel_x >= barl_x - BAR_X_LEN && im_pixel_x <= barl_x + BAR_X_LEN) && (im_pixel_y >= barl_y - BAR_Y_LEN && im_pixel_y <= barl_y + BAR_Y_LEN)
                 ? 12'b111111111111 : 12'b0;
-   //assign rgb = curr_vec_pos == IM_BALL_LOC ? 12'b111111111111 : 12'b0;// (curr_vec_pos >= IM_BALL_LOC-25 && curr_vec_pos <= IM_BALL_LOC+25) ? 12'b111111111111 : 12'b0;
 
    // Read Switch
    assign IM_SW_INPUT_rdata = im_sw_input;
