@@ -17,7 +17,9 @@ module top_system(
             output [3:0] Blue,
 
             // IM
-	          input         im_sw_input
+	          input           im_sw_input,
+	          input [8-1:0]   im_ctrl1_data,
+	          input [8-1:0]   im_ctrl2_data
             );
       
          wire [9:0] 	   pixel_x;
@@ -76,7 +78,9 @@ module top_system(
       .im_pixel_x        (pixel_x),
       .im_pixel_y        (pixel_y),
       .im_rgb            (rgb),
-      .im_sw_input       (im_sw_input)
+      .im_sw_input       (im_sw_input),
+      .im_ctrl1_data     (im_ctrl1_data),
+      .im_ctrl2_data     (im_ctrl2_data)
       );
 
 endmodule

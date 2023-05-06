@@ -8,10 +8,12 @@
       .rst     (rst),
 
       // Registers interface
-      .im_sw_input (im_sw_input),
-      .im_pixel_x (im_pixel_x),
-      .im_pixel_y (im_pixel_y),
-      .im_rgb (im_rgb),      
+      .im_sw_input       (im_sw_input),
+      .im_pixel_x        (im_pixel_x),
+      .im_pixel_y        (im_pixel_y),
+      .im_rgb            (im_rgb),
+      .im_ctrl1_data     (im_ctrl1_data),
+      .im_ctrl2_data     (im_ctrl2_data),
 
       // CPU interface
       .valid   (slaves_req[`valid(`IM)]),
