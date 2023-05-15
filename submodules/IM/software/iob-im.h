@@ -14,5 +14,3 @@ void im_set_barr_loc(uint32_t value);
 
 // Get values from inputs
 uint32_t im_get_sw_input();
-uint32_t im_get_ctrl1_data();
-uint32_t im_get_ctrl2_data();

@@ -1,11 +1,10 @@
 SHELL = bash
-export 
+export
 
 #run on external memory implies DDR use
 ifeq ($(RUN_EXTMEM),1)
 USE_DDR=1
 endif
-
 
 #
 # BUILD EMBEDDED SOFTWARE
@@ -25,6 +24,32 @@ fw-clean:
 
 fw-debug:
 	make -C $(FIRM_DIR) debug
+
+
+
+
+
+
+#compiler settings
+TEMP_TOOLCHAIN_PREFIX:=riscv64-unknown-elf-
+TEMP_CFLAGS=-Os -nostdlib -march=$(MFLAGS) -mabi=ilp32 --specs=nano.specs -Wcast-align=strict -Wall -Werror -Wextra
+TEMP_LFLAGS+= -Wl,-Bstatic,-T,../template.lds,--strip-debug
+TEMP_LLIBS=-lgcc -lc -lnosys
+
+TEMP_MFLAGS=$(MFLAGS_BASE)$(MFLAG_M)$(MFLAG_C)
+
+TEMP_MFLAGS_BASE:=rv32i
+
+
+TEMP_SRC= firmware.S firmware.c ../../submodules/UART/software/printf.c GameUtils.c Utils.c
+
+
+
+
+all:
+	cd software/firmware && $(TEMP_TOOLCHAIN_PREFIX)gcc -o $@ $(TEMP_CFLAGS) $(TEMP_LFLAGS) $(TEMP_DEFINE) $(TEMP_INCLUDE) $(TEMP_SRCTEMP) $(TEMP_LLIBS)
+
+
 
 #
 # EMULATE ON PC

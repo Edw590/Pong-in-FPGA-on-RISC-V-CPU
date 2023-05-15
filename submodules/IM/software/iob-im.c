@@ -24,9 +24,3 @@ void im_set_barr_loc(uint32_t value) {
 uint32_t im_get_sw_input() {
 	return IOB_IM_GET_SW_INPUT();
 }
-uint32_t im_get_ctrl1_data() {
-	return IOB_IM_GET_CTRL1_DATA();
-}
-uint32_t im_get_ctrl2_data() {
-	return IOB_IM_GET_CTRL2_DATA();
-}

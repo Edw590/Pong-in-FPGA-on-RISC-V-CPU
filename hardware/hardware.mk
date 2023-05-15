@@ -36,6 +36,9 @@ include $(IM_DIR)/hardware/hardware.mk
 #TIMER
 include $(TIMER_DIR)/hardware/hardware.mk
 
+#NESCTRL
+include $(NESCTRL_DIR)/hardware/hardware.mk
+
 
 #HARDWARE PATHS
 INC_DIR:=$(HW_DIR)/include

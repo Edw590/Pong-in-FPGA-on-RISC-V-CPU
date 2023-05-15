@@ -21,6 +21,9 @@ include $(IM_DIR)/software/embedded/embedded.mk
 #TIMER
 include $(TIMER_DIR)/software/embedded/embedded.mk
 
+#NESCTRL
+include $(NESCTRL_DIR)/software/embedded/embedded.mk
+
 #HEADERS
 HDR+=periphs.h
 

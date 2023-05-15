@@ -5,26 +5,33 @@ module top_system(
 	          input         clk,
 	          input         reset,
 
-	          //uart
+	          // UART
 	          output        uart_txd,
 	          input         uart_rxd,
 
             // VGA
-            output 	   v_sync,
-            output 	   h_sync,
+            output 	     v_sync,
+            output 	     h_sync,
             output [3:0] Red,
             output [3:0] Green,
             output [3:0] Blue,
 
             // IM
-	          input           im_sw_input,
-	          input [8-1:0]   im_ctrl1_data,
-	          input [8-1:0]   im_ctrl2_data
+	          input         im_sw_input,
+
+            // CTRLDRV
+	          input         nesctrl_ctrl1_q7,
+	          input         nesctrl_ctrl2_q7,
+	          output        nesctrl_pl,
+
+            output        clk_out
             );
       
          wire [9:0] 	   pixel_x;
          wire [9:0] 	   pixel_y;
          wire [11:0] 	   rgb;
+
+         assign clk_out = clk;
 
    //
    // RESET MANAGEMENT
@@ -58,13 +65,13 @@ module top_system(
       .rst           (sys_rst),
       .trap          (trap),
 
-      //UART
+      // UART
       .uart_txd      (uart_txd),
       .uart_rxd      (uart_rxd),
       .uart_rts      (),
       .uart_cts      (1'b1),
 
-      //VGA
+      // VGA
       .rgb           (rgb),
       .v_sync        (v_sync),
       .h_sync        (h_sync),
@@ -74,13 +81,16 @@ module top_system(
       .pixel_x       (pixel_x),
       .pixel_y       (pixel_y),
 
-      //IM
+      // IM
       .im_pixel_x        (pixel_x),
       .im_pixel_y        (pixel_y),
       .im_rgb            (rgb),
       .im_sw_input       (im_sw_input),
-      .im_ctrl1_data     (im_ctrl1_data),
-      .im_ctrl2_data     (im_ctrl2_data)
+      
+      // CTRLDRV
+      .nesctrl_ctrl1_q7  (nesctrl_ctrl1_q7),
+      .nesctrl_ctrl2_q7  (nesctrl_ctrl2_q7),
+      .nesctrl_pl        (nesctrl_pl)
       );
 
 endmodule

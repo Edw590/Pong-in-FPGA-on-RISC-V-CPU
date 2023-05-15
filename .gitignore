@@ -1,8 +1,9 @@
 #TOP
 #nothing to ignore
 
-# VS Code preferences
+# VS Code and IntelliJ preferences
 .vscode/*
+.idea/*
 
 #SOFTWARE
 software/periphs.h

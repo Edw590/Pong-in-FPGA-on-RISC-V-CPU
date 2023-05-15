@@ -21,9 +21,6 @@ module iob_im # (
 		`IOB_INPUT(im_pixel_y, 10),
 		`IOB_INPUT(im_sw_input, 32),
 
-		`IOB_INPUT(im_ctrl1_data, 16),
-		`IOB_INPUT(im_ctrl2_data, 16),
-
 		`IOB_OUTPUT(im_rgb, 12),
 		
 		`include "iob_gen_if.vh"
@@ -37,6 +34,8 @@ module iob_im # (
 	localparam BALL_Y_HLEN = BALL_X_HLEN;
 	localparam BAR_X_HLEN = 3;
 	localparam BAR_Y_HLEN = 20;
+	
+	// To know the format of the _LOC registers, check the ObjInfo struct in GameUtils.h
 	localparam MASK_X = 32'b00000000000000000000001111111111;
 	localparam MASK_Y = 32'b00000000000011111111110000000000;
 
@@ -82,7 +81,6 @@ module iob_im # (
 		.data_out   (IM_BARR_LOC)
 	);
 
-	// To know the format of the _LOC registers, check the ObjInfo struct in GameUtils.h
 	assign ball_x =  IM_BALL_LOC & MASK_X;
 	assign ball_y = (IM_BALL_LOC & MASK_Y) >> 10;
 	
@@ -100,10 +98,6 @@ module iob_im # (
 
 	// Read Switch
 	assign IM_SW_INPUT_rdata = im_sw_input;
-
-	// Read controller data
-	assign IM_CTRL1_DATA_rdata = im_ctrl1_data;
-	assign IM_CTRL2_DATA_rdata = im_ctrl2_data;
 
 	// Outputs
 	assign im_rgb = rgb;
