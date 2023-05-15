@@ -6,6 +6,7 @@ ifeq ($(RUN_EXTMEM),1)
 USE_DDR=1
 endif
 
+
 #
 # BUILD EMBEDDED SOFTWARE
 #
@@ -29,6 +30,9 @@ fw-debug:
 
 
 
+#####################################################
+# This here is for CLion to recognize the project and provide code checks and insight.
+# It is not used for building the project - don't use this.
 
 #compiler settings
 TEMP_TOOLCHAIN_PREFIX:=riscv64-unknown-elf-
@@ -44,11 +48,9 @@ TEMP_MFLAGS_BASE:=rv32i
 TEMP_SRC= firmware.S firmware.c ../../submodules/UART/software/printf.c GameUtils.c Utils.c
 
 
-
-
 all:
 	cd software/firmware && $(TEMP_TOOLCHAIN_PREFIX)gcc -o $@ $(TEMP_CFLAGS) $(TEMP_LFLAGS) $(TEMP_DEFINE) $(TEMP_INCLUDE) $(TEMP_SRCTEMP) $(TEMP_LLIBS)
-
+#####################################################
 
 
 #
