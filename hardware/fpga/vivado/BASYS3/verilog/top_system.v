@@ -19,19 +19,17 @@ module top_system(
             // IM
 	          input         im_sw_input,
 
-            // CTRLDRV
+            // NESCTRL
 	          input         nesctrl_ctrl1_q7,
 	          input         nesctrl_ctrl2_q7,
+            output [16-1:0]   nesctrl_ctrl1_data,
 	          output        nesctrl_pl,
-
-            output        clk_out
+	          output        nesctrl_clk
             );
       
          wire [9:0] 	   pixel_x;
          wire [9:0] 	   pixel_y;
          wire [11:0] 	   rgb;
-
-         assign clk_out = clk;
 
    //
    // RESET MANAGEMENT
@@ -87,10 +85,12 @@ module top_system(
       .im_rgb            (rgb),
       .im_sw_input       (im_sw_input),
       
-      // CTRLDRV
+      // NESCTRL
+      .nesctrl_ctrl1_data  (nesctrl_ctrl1_data),
       .nesctrl_ctrl1_q7  (nesctrl_ctrl1_q7),
       .nesctrl_ctrl2_q7  (nesctrl_ctrl2_q7),
-      .nesctrl_pl        (nesctrl_pl)
+      .nesctrl_pl        (nesctrl_pl),
+      .nesctrl_clk       (nesctrl_clk)
       );
 
 endmodule

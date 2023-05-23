@@ -14,7 +14,7 @@ struct ObjInfo objs_info[3] = {0};
 
 struct PlayerBarInfo players_bars_info[2] = {0};
 
-int main() {
+int main(void) {
 	struct ObjInfo *ball_info = &objs_info[OBJ_BALL];
 	struct ObjInfo *barl_info = &objs_info[OBJ_BARL];
 	struct ObjInfo *barr_info = &objs_info[OBJ_BARR];
@@ -57,6 +57,8 @@ int main() {
 	}
 
 
-	uart_puts("\\\\------------------------//\n");
+	//uart_puts("\\\\------------------------//\n");
 	uart_finish();
+
+	return 0;
 }

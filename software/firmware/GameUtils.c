@@ -16,6 +16,11 @@ void resetGame(struct ObjInfo *objs_info, struct PlayerBarInfo *players_bars_inf
     objs_info[OBJ_BALL].what_obj = OBJ_BALL;
 	objs_info[OBJ_BARL].what_obj = OBJ_BARL;
 	objs_info[OBJ_BARR].what_obj = OBJ_BARR;
+	objs_info[OBJ_BALL].vx = VELOCITY;
+	objs_info[OBJ_BALL].vy = VELOCITY;
+	// todo Set the signs randomly!
+	objs_info[OBJ_BALL].vx_sign = 0;
+	objs_info[OBJ_BALL].vy_sign = 0;
 
 	players_bars_info[PLAYER_1].player_num = PLAYER_1;
 	players_bars_info[PLAYER_1].what_bar = OBJ_BARL;
