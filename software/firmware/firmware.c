@@ -34,7 +34,7 @@ int main(void) {
 
 	//int prev_sw_state = (int) im_get_sw_input();
 
-	while (true) {
+	while (true) { 
 		if (im_get_sw_input() != 0) {
 			//prev_sw_state = im_get_sw_input();
 
