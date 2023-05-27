@@ -73,19 +73,19 @@ set_property PACKAGE_PIN U18 [get_ports {im_sw_input}]
 ## NES Controllers
 
 # Controller 1
-set_property PACKAGE_PIN G2 [get_ports {nesctrl_clk}]
+set_property PACKAGE_PIN B16 [get_ports {nesctrl_clk}]
   set_property IOSTANDARD LVCMOS33 [get_ports {nesctrl_clk}]
-set_property PACKAGE_PIN J2 [get_ports {nesctrl_pl}]
+set_property PACKAGE_PIN B15 [get_ports {nesctrl_pl}]
   set_property IOSTANDARD LVCMOS33 [get_ports {nesctrl_pl}]
-set_property PACKAGE_PIN L2 [get_ports {nesctrl_ctrl1_q7}]
+set_property PACKAGE_PIN A16 [get_ports {nesctrl_ctrl1_q7}]
   set_property IOSTANDARD LVCMOS33 [get_ports {nesctrl_ctrl1_q7}]
 
 # Controller 2
-set_property PACKAGE_PIN N2 [get_ports {nesctrl_clk}]
+set_property PACKAGE_PIN P18 [get_ports {nesctrl_clk}]
   set_property IOSTANDARD LVCMOS33 [get_ports {nesctrl_clk}]
-set_property PACKAGE_PIN M2 [get_ports {nesctrl_pl}]
+set_property PACKAGE_PIN N17 [get_ports {nesctrl_pl}]
   set_property IOSTANDARD LVCMOS33 [get_ports {nesctrl_pl}]
-set_property PACKAGE_PIN L3 [get_ports {nesctrl_ctrl2_q7}]
+set_property PACKAGE_PIN M18 [get_ports {nesctrl_ctrl2_q7}]
   set_property IOSTANDARD LVCMOS33 [get_ports {nesctrl_ctrl2_q7}]
 
 

@@ -30,22 +30,39 @@ module iob_im # (
 	`include "iob_im_swreg_gen.vh"
 	
 	// HLEN == Half Length (total length desired divided by 2)
-	localparam BALL_X_HLEN = 7;
+	// Must be the same as in GameUtils.h
+	localparam BALL_X_HLEN = 3;
 	localparam BALL_Y_HLEN = BALL_X_HLEN;
-	localparam BAR_X_HLEN = 3;
+	localparam BAR_X_HLEN = 1;
 	localparam BAR_Y_HLEN = 20;
 	
-	// To know the format of the _LOC registers, check the ObjInfo struct in GameUtils.h
-	localparam MASK_X = 32'b00000000000000000000001111111111;
-	localparam MASK_Y = 32'b00000000000011111111110000000000;
+	// Format of the _LOC registers (the ObjInfo struct in GameUtils.h)
+	//struct ObjInfo {
+	//	// X coordinate
+	//	unsigned int x:10;
+	//	// Y coordinate
+	//	unsigned int y:10;
+	//	// What object the instance represents (one of the OBJ_* macros)
+	//	unsigned int what_obj:2;
+	//	// Velocity in the X axis (0 for no movement, 1 for movement)
+	//	unsigned int vx:1;
+	//	// Same as for the X axis, but for the Y axis
+	//	unsigned int vy:1;
+	//	// Sign of the velocity in the X axis (1 for positive, 0 for negative)
+	//	unsigned int vx_sign:1;
+	//	// Same as for the X axis, but for the Y axis
+	//	unsigned int vy_sign:1;
+	//	// (Currently) unused bits
+	//	unsigned int unused:6;
+	//};
 
-	reg [12-1:0] rgb;
-	reg [32-1:0] ball_x;
-	reg [32-1:0] ball_y;
-	reg [32-1:0] barl_x;
-	reg [32-1:0] barl_y;
-	reg [32-1:0] barr_x;
-	reg [32-1:0] barr_y;
+	wire [12-1:0] rgb;
+	wire [32-1:0] ball_x;
+	wire [32-1:0] ball_y;
+	wire [32-1:0] barl_x;
+	wire [32-1:0] barl_y;
+	wire [32-1:0] barr_x;
+	wire [32-1:0] barr_y;
 
 	// SWRegs
 	`IOB_WIRE(IM_BALL_LOC, 32)
@@ -58,7 +75,6 @@ module iob_im # (
 		.data_in    (IM_BALL_LOC_wdata),
 		.data_out   (IM_BALL_LOC)
 	);
-	
 	`IOB_WIRE(IM_BARL_LOC, 32)
 	iob_reg #(.DATA_W(32))
 	barl_loc (
@@ -69,7 +85,6 @@ module iob_im # (
 		.data_in    (IM_BARL_LOC_wdata),
 		.data_out   (IM_BARL_LOC)
 	);
-	
 	`IOB_WIRE(IM_BARR_LOC, 32)
 	iob_reg #(.DATA_W(32))
 	barr_loc (
@@ -80,15 +95,15 @@ module iob_im # (
 		.data_in    (IM_BARR_LOC_wdata),
 		.data_out   (IM_BARR_LOC)
 	);
+	
+	assign ball_x = {22'b0, IM_BALL_LOC[9:0]};
+	assign ball_y = {22'b0, IM_BALL_LOC[19:10]};
 
-	assign ball_x =  IM_BALL_LOC & MASK_X;
-	assign ball_y = (IM_BALL_LOC & MASK_Y) >> 10;
-	
-	assign barl_x =  IM_BARL_LOC & MASK_X;
-	assign barl_y = (IM_BARL_LOC & MASK_Y) >> 10;
-	
-	assign barr_x =  IM_BARR_LOC & MASK_X;
-	assign barr_y = (IM_BARR_LOC & MASK_Y) >> 10;
+	assign barl_x = {22'b0, IM_BARL_LOC[9:0]};
+	assign barl_y = {22'b0, IM_BARL_LOC[19:10]};
+
+	assign barr_x = {22'b0, IM_BARR_LOC[9:0]};
+	assign barr_y = {22'b0, IM_BARR_LOC[19:10]};
 
 	// White when pixel is in the ball or bars, black otherwise.
 	assign rgb = (im_pixel_x >= ball_x - BALL_X_HLEN && im_pixel_x <= ball_x + BALL_X_HLEN) && (im_pixel_y >= ball_y - BALL_Y_HLEN && im_pixel_y <= ball_y + BALL_Y_HLEN) ||

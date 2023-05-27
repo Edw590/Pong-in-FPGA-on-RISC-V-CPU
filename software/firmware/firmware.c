@@ -30,6 +30,8 @@ int main(void) {
 
 	resetGame(objs_info, players_bars_info);
 
+	//goto skip;
+
 	//int prev_sw_state = (int) im_get_sw_input();
 
 	while (true) {
@@ -43,9 +45,16 @@ int main(void) {
 
 		for (int i = 0; i < 2; i++) {
 			unsigned short ctrl_data = (unsigned short) players_bars_info[i].get_ctrl_data();
+			//printf("------------------------\n");
+			//printf("ctrl num: %d\n", i);
+			//printf("ctrl_data: %d\n", ctrl_data);
+			//printf("ctrl_data & READY: %d\n", ctrl_data & READY);
+			//printf("ctrl_data & BTN_DOWN: %d\n", ctrl_data & BTN_DOWN);
+			//printf("ctrl_data & BTN_UP: %d\n", ctrl_data & BTN_UP);
+			//printf("ctrl_data & BTN_A: %d\n", ctrl_data & BTN_A);
 			if ((ctrl_data & READY) != 0 && ((ctrl_data & BTN_DOWN) != 0 || (ctrl_data & BTN_UP) != 0)) {
 				struct ObjInfo *bar_info = players_bars_info[i].bar_info;
-				int ctrl_speed = (ctrl_data & BTN_AA) != 0 ? FAST_SPEED : NORMAL_SPEED;
+				int ctrl_speed = (ctrl_data & BTN_A) != 0 ? FAST_SPEED : NORMAL_SPEED;
 				if ((ctrl_data & BTN_DOWN) != 0) {
 					ctrl_speed = -ctrl_speed;
 				}
@@ -53,11 +62,15 @@ int main(void) {
 			}
 		}
 
-		sleep(5);
+		moveBall(ball_info);
+
+		sleep(4);
 	}
 
+	//skip:
 
-	//uart_puts("\\\\------------------------//\n");
+
+	uart_puts("\\\\------------------------//\n");
 	uart_finish();
 
 	return 0;

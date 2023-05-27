@@ -26,11 +26,11 @@ struct ObjInfo {
 	unsigned int what_obj:2;
 	// Velocity in the X axis (0 for no movement, 1 for movement)
     unsigned int vx:1;
-    // Same as for the X axis, but for the Y axis
+	// Velocity in the Y axis (0 for no movement, 1 for movement)
     unsigned int vy:1;
 	// Sign of the velocity in the X axis (1 for positive, 0 for negative)
     unsigned int vx_sign:1;
-    // Same as for the X axis, but for the Y axis
+	// Sign of the velocity in the Y axis (1 for positive, 0 for negative)
     unsigned int vy_sign:1;
     // (Currently) unused bits
 	unsigned int unused:6;
@@ -64,8 +64,17 @@ void resetGame(struct ObjInfo *objs_info, struct PlayerBarInfo *players_bars_inf
  * or to the corresponding MAX_* macro depending on if it's lower than the minimum (0) or greater than the maximum,
  * respectively.
  *
- * @param obj_info the struct with the object to move
+ * @param obj_info pointer to the struct with the object to move
  * @param x the new x coordinate
  * @param y the new y coordinate
  */
 void setCoords(struct ObjInfo *obj_info, unsigned x, unsigned y);
+
+/**	
+ * Moves the ball across the screen while simulating its physics.
+ * 
+ * The ball will bounce off the bars and the screen's borders.
+ * 
+ * @param ball_info pointer to the ball's struct
+*/
+void moveBall(struct ObjInfo *ball_info);
