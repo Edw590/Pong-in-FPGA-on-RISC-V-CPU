@@ -5,19 +5,26 @@ module top_system(
 	          input         clk,
 	          input         reset,
 
-	          //uart
+	          // UART
 	          output        uart_txd,
 	          input         uart_rxd,
 
             // VGA
-            output 	   v_sync,
-            output 	   h_sync,
+            output 	     v_sync,
+            output 	     h_sync,
             output [3:0] Red,
             output [3:0] Green,
             output [3:0] Blue,
 
             // IM
-	          input         im_sw_input
+	          input         im_sw_input,
+
+            // NESCTRL
+	          input         nesctrl_ctrl1_q7,
+	          input         nesctrl_ctrl2_q7,
+            output [16-1:0]   nesctrl_ctrl1_data,
+	          output        nesctrl_pl,
+	          output        nesctrl_clk
             );
       
          wire [9:0] 	   pixel_x;
@@ -56,13 +63,13 @@ module top_system(
       .rst           (sys_rst),
       .trap          (trap),
 
-      //UART
+      // UART
       .uart_txd      (uart_txd),
       .uart_rxd      (uart_rxd),
       .uart_rts      (),
       .uart_cts      (1'b1),
 
-      //VGA
+      // VGA
       .rgb           (rgb),
       .v_sync        (v_sync),
       .h_sync        (h_sync),
@@ -72,11 +79,18 @@ module top_system(
       .pixel_x       (pixel_x),
       .pixel_y       (pixel_y),
 
-      //IM
+      // IM
       .im_pixel_x        (pixel_x),
       .im_pixel_y        (pixel_y),
       .im_rgb            (rgb),
-      .im_sw_input       (im_sw_input)
+      .im_sw_input       (im_sw_input),
+      
+      // NESCTRL
+      .nesctrl_ctrl1_data  (nesctrl_ctrl1_data),
+      .nesctrl_ctrl1_q7  (nesctrl_ctrl1_q7),
+      .nesctrl_ctrl2_q7  (nesctrl_ctrl2_q7),
+      .nesctrl_pl        (nesctrl_pl),
+      .nesctrl_clk       (nesctrl_clk)
       );
 
 endmodule

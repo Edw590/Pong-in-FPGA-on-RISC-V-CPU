@@ -18,11 +18,17 @@ include $(VGA_DIR)/software/embedded/embedded.mk
 #IM
 include $(IM_DIR)/software/embedded/embedded.mk
 
+#TIMER
+include $(TIMER_DIR)/software/embedded/embedded.mk
+
+#NESCTRL
+include $(NESCTRL_DIR)/software/embedded/embedded.mk
+
 #HEADERS
 HDR+=periphs.h
 
 #SOURCES
-SRC+= firmware.S firmware.c $(UART_DIR)/software/printf.c
+SRC+= firmware.S firmware.c $(UART_DIR)/software/printf.c GameUtils.c Utils.c
 
 #RULES
 
