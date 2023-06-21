@@ -1,15 +1,13 @@
-IM_DIR:=../..
+PMEM_DIR:=../..
 
 incdir:=-I
 defmacro:=-D
 
-include $(IM_DIR)/hardware/hardware.mk
+include $(PMEM_DIR)/hardware/hardware.mk
 
 ifeq ($(VCD),1)
 DEFINE+=$(defmacro)VCD
 endif
-
-VSRC+=$(IM_HW_DIR)/simulation/testbench/im_tb.v
 
 #icarus verilog simulator
 VLOG:=iverilog -W all -g2005-sv
@@ -36,7 +34,7 @@ test1: clean
 	make run VCD=0 TEST_LOG=">> test.log"
 
 debug:
-	@echo $(IM_DIR)
+	@echo $(PMEM_DIR)
 	@echo $(MODULES)
 	@echo $(SUBMODULES_DIR)
 	@echo $(MKREGS)
@@ -46,7 +44,7 @@ debug:
 clean-testlog:
 	@rm -f test.log
 
-clean: im-hw-clean
+clean: pmem-hw-clean
 	@rm -f a.out *.vcd
 
 clean-all: clean-testlog clean

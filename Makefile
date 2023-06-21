@@ -45,7 +45,7 @@ TEMP_MFLAGS=$(MFLAGS_BASE)$(MFLAG_M)$(MFLAG_C)
 TEMP_MFLAGS_BASE:=rv32i
 
 
-TEMP_SRC= firmware.S firmware.c ../../submodules/UART/software/printf.c GameUtils.c Utils.c
+TEMP_SRC= firmware.S firmware.c ../../submodules/UART/software/printf.c CtrlUtils.c GameUtils.c Utils.c
 
 
 all:
