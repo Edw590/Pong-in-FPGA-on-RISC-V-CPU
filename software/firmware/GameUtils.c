@@ -1,119 +1,148 @@
 #include <stdbool.h>
-#include "printf.h"	// todo Remove this
-#include "iob-im.h"
+#include "printf.h"
+#include "iob-pmem.h"
 #include "iob-nesctrl.h"
 #include "GameUtils.h"
 
-// Must be the same as in iob-im.v (HL == Half Length)
+// Must be the same as in iob-pmem.v (HL == Half Length)
 #define BALL_X_HLEN 3
 #define BALL_Y_HLEN BALL_X_HLEN
 #define BAR_X_HLEN 1
 #define BAR_Y_HLEN 20
 
-#define BALL_VELOCITY 1
+#define BALL_Y_LEN (BALL_Y_HLEN*2+1)
+#define BAR_Y_LEN (BAR_Y_HLEN*2+1)
 
-#define MAX_BOUNCE_ANGLE 75
+static void setObjCoords(struct ObjInfo *obj_info, int x, int y);
+static void setLOCRegister(struct ObjInfo *obj_info);
 
 void resetGame(struct ObjInfo *objs_info, struct PlayerBarInfo *players_bars_info) {
 	// Set the object types
     objs_info[OBJ_BALL].what_obj = OBJ_BALL;
 	objs_info[OBJ_BARL].what_obj = OBJ_BARL;
 	objs_info[OBJ_BARR].what_obj = OBJ_BARR;
-	objs_info[OBJ_BALL].vx = BALL_VELOCITY;
+	objs_info[OBJ_BALL].vx = SPEED_NORMAL;
 
 	// todo Set these randomly!
-	objs_info[OBJ_BALL].vy = BALL_VELOCITY;
-	objs_info[OBJ_BALL].vx_sign = 0;
-	objs_info[OBJ_BALL].vy_sign = 0;
-	
-	uint32_t obj_info_raw = *((uint32_t *) objs_info[OBJ_BALL]);
-	im_set_ball_loc(obj_info_raw);
-	uint32_t obj_info_raw = *((uint32_t *) objs_info[OBJ_BARL]);
-	im_set_barl_loc(obj_info_raw);
-	uint32_t obj_info_raw = *((uint32_t *) objs_info[OBJ_BARR]);
-	im_set_barr_loc(obj_info_raw);
+	objs_info[OBJ_BALL].vy = SPEED_NORMAL;
+	objs_info[OBJ_BALL].vx_sign = X_SPEED_LEFT;
+	objs_info[OBJ_BALL].vy_sign = Y_SPEED_UP;
+
+	// Set the initial colors
+	objs_info[OBJ_BALL].rgb = 0xFFF; // White
+	objs_info[OBJ_BARL].rgb = 0xF00; // Red
+	objs_info[OBJ_BARR].rgb = 0x0F0; // Green
+
+    setLOCRegister(&objs_info[OBJ_BALL]);
+    setLOCRegister(&objs_info[OBJ_BARL]);
+    setLOCRegister(&objs_info[OBJ_BARR]);
 
 	players_bars_info[PLAYER_1].player_num = PLAYER_1;
-	players_bars_info[PLAYER_1].what_bar = OBJ_BARL;
     players_bars_info[PLAYER_1].bar_info = &objs_info[OBJ_BARL];
 	players_bars_info[PLAYER_1].get_ctrl_data = &nesctrl_get_ctrl1_data;
 	players_bars_info[PLAYER_2].player_num = PLAYER_2;
-	players_bars_info[PLAYER_2].what_bar = OBJ_BARR;
     players_bars_info[PLAYER_2].bar_info = &objs_info[OBJ_BARR];
 	players_bars_info[PLAYER_2].get_ctrl_data = &nesctrl_get_ctrl2_data;
 
 	// Set the initial coordinates (ball in the middle, bars on the sides)
 	// todo Set the ball's coordinates randomly! (in part - with a margin from the edges)
-	setCoords(&objs_info[OBJ_BALL], 320, 239);
-	setCoords(&objs_info[OBJ_BARL], 20, 239);
-	setCoords(&objs_info[OBJ_BARR], 620, 239);
+    setObjCoords(&objs_info[OBJ_BALL], 320, 239);
+    setObjCoords(&objs_info[OBJ_BARL], 20, 239);
+    setObjCoords(&objs_info[OBJ_BARR], 620, 239);
 }
 
-void moveBall(struct ObjInfo *objs_info) {
+void moveObjs(struct ObjInfo *objs_info) {
 	struct ObjInfo *ball_info = &objs_info[OBJ_BALL];
 
-	int vx_sign_real = (ball_info->vx_sign > 0) ? 1 : -1;
-	int vy_sign_real = (ball_info->vy_sign > 0) ? 1 : -1;
-	int x = ball_info->x;
-	int y = ball_info->y;
+	int vx_sign_real = 0;
+	int vy_sign_real = 0;
+    int x = 0;
+    int y = 0;
+	// Last object on the loop must be the ball (what's below the loop expects its values on the variables above)
+	for (int i = OBJ_BARR; i >= OBJ_BALL; --i) {
+		struct ObjInfo *obj_info = &objs_info[i];
+		vx_sign_real = (X_SPEED_LEFT == obj_info->vx_sign) ? -1 : 1;
+		vy_sign_real = (Y_SPEED_UP == obj_info->vy_sign) ? -1 : 1;
+		x = obj_info->x;
+		y = obj_info->y;
 
-    // Update location
-	x += vx_sign_real*ball_info->vx;
-	y += vy_sign_real*ball_info->vy;
+		// Update location
+		x += vx_sign_real*obj_info->vx;
+		y += vy_sign_real*obj_info->vy;
+        setObjCoords(obj_info, x, y);
+	}
 
-	setCoords(ball_info, x, y);
-
-    if ((y - BALL_Y_HLEN < 0) | (y + BALL_Y_HLEN > MAX_Y)) {
+    if ((y - BALL_Y_HLEN < 0) || (y + BALL_Y_HLEN > MAX_Y)) {
 		// Invert the sign of the Y velocity
-		ball_info->vy_sign = vy_sign_real > 0 ? 0 : 1;
+		ball_info->vy_sign = (vy_sign_real > 0) ? Y_SPEED_UP : Y_SPEED_DOWN;
 	}
 
 	// fixme Goal on player. Ball is not supposed to bounce off the side walls.
-    if ((x - BALL_X_HLEN < 0) | (x + BALL_X_HLEN > MAX_X)) {
+    if ((x - BALL_X_HLEN < 0) || (x + BALL_X_HLEN > MAX_X)) {
 		// Invert the sign of the X velocity
-		ball_info->vx_sign = vx_sign_real > 0 ? 0 : 1;
+		ball_info->vx_sign = (vx_sign_real > 0) ? X_SPEED_LEFT : X_SPEED_RIGHT;
     }
 
 	// Check if the ball hits the paddles
 	int bar_hit = -1;
 	for (int i = OBJ_BARL; i <= OBJ_BARR; ++i) {
-		if ((x-BALL_X_HLEN == objs_info[i].x+BAR_X_HLEN || x+BALL_X_HLEN == objs_info[i].x-BAR_X_HLEN) &&
-				y-BALL_Y_HLEN <= objs_info[i].y+BAR_Y_HLEN && y+BALL_Y_HLEN >= objs_info[i].y-BAR_Y_HLEN) {
+		if ((x-BALL_X_HLEN <= objs_info[i].x+BAR_X_HLEN && x+BALL_X_HLEN >= objs_info[i].x-BAR_X_HLEN) &&
+				(y-BALL_Y_HLEN <= objs_info[i].y+BAR_Y_HLEN && y+BALL_Y_HLEN >= objs_info[i].y-BAR_Y_HLEN)) {
 			bar_hit = i;
 
 			break;
 		}
 	}
-
 	if (bar_hit != -1) {
 		int min_bar_y = objs_info[bar_hit].y - BAR_Y_HLEN;
 		int max_bar_y = objs_info[bar_hit].y + BAR_Y_HLEN;
-		int one_third_bar_y = min_bar_y + BAR_Y_HLEN/3;
-		int two_third_bar_y = min_bar_y + 2*(BAR_Y_HLEN/3);
+		int one_third_bar_y = min_bar_y + (int) (BAR_Y_LEN/3.0) + 2;
+		int two_third_bar_y = min_bar_y + (int) (2.0*(BAR_Y_LEN/3.0)) - 2;
 
+		// Don't just invert the sign - if the ball hits in the middle of the bottom pixels of the bars, it will never
+		// leave the bar unless the bar moves in the opposite direction.
 		if (OBJ_BARL == bar_hit) {
-			ball_info->vx_sign = 1;
-		} else {
-			ball_info->vx_sign = 0;
+            ball_info->vx_sign = X_SPEED_RIGHT;
+        } else {
+			ball_info->vx_sign = X_SPEED_LEFT;
 		}
 
-		if (y >= min_bar_y && y < one_third_bar_y) {
-			ball_info->vy_sign = 0;
-		} else if (y >= one_third_bar_y && y < two_third_bar_y) {
-			ball_info->vy = 0;
-		} else if (y >= two_third_bar_y && y <= max_bar_y) {
-			ball_info->vy_sign = 1;
+		if (ball_info->vy_sign == objs_info[bar_hit].vy_sign && SPEED_FAST == objs_info[bar_hit].vy) {
+			ball_info->vy = SPEED_FAST;
+			ball_info->vx = SPEED_FAST;
+		} else {
+			ball_info->vy = SPEED_NORMAL;
+			ball_info->vx = SPEED_NORMAL;
+		}
+		if (y >= min_bar_y - BALL_Y_HLEN && y <= one_third_bar_y) {
+			ball_info->vy_sign = Y_SPEED_UP;
+		} else if (y >= two_third_bar_y && y <= max_bar_y + BALL_Y_HLEN) {
+			ball_info->vy_sign = Y_SPEED_DOWN;
+		} else {
+			ball_info->vy = SPEED_NONE;
 		}
 	}
-	
-	uint32_t ball_info_raw = *((uint32_t *) ball_info);
-	im_set_ball_loc(ball_info_raw);
+
+    setLOCRegister(ball_info);
+    setLOCRegister(&objs_info[OBJ_BARL]);
+    setLOCRegister(&objs_info[OBJ_BARR]);
 }
 
-void setCoords(struct ObjInfo *obj_info, unsigned x, unsigned y) {
+/**
+ * Set the coordinates of the provided object.
+ *
+ * If the object cannot be moved to the new coordinate (out of range - out of screen resolutions), it will be set to 0
+ * or to the corresponding MAX_* macro depending on if it's lower than the minimum (0) or greater than the maximum,
+ * respectively.
+ *
+ * @param obj_info pointer to the struct with the object to move
+ * @param x the new x coordinate
+ * @param y the new y coordinate
+ */
+static void setObjCoords(struct ObjInfo *obj_info, int x, int y) {
     unsigned what_obj = obj_info->what_obj;
-    unsigned obj_x_hlen = 0;
-    unsigned obj_y_hlen = 0;
+    int obj_x_hlen = 0;
+    int obj_y_hlen = 0;
 
 	if (OBJ_BALL == what_obj) {
 		obj_x_hlen = BALL_X_HLEN;
@@ -123,33 +152,40 @@ void setCoords(struct ObjInfo *obj_info, unsigned x, unsigned y) {
 		obj_y_hlen = BAR_Y_HLEN;
 	}
 
-	unsigned new_x = 0;
-    unsigned new_y = 0;
+	int new_x = x;
+    int new_y = y;
 
 	if (x < obj_x_hlen) {
 		new_x = 0 + obj_x_hlen;
 	} else if (x + obj_x_hlen > MAX_X) {
 		new_x = MAX_X - obj_x_hlen;
-	} else {
-		new_x = x;
 	}
 	if (y < obj_y_hlen) {
 		new_y = 0 + obj_y_hlen;
 	} else if (y + obj_y_hlen > MAX_Y) {
 		new_y = MAX_Y - obj_y_hlen;
-	} else {
-		new_y = y;
 	}
 
-	obj_info->x = new_x;
-	obj_info->y = new_y;
+    // Safe to cast to unsigned (small numbers)
+	obj_info->x = (unsigned) new_x;
+	obj_info->y = (unsigned) new_y;
 
-	uint32_t obj_info_raw = *((uint32_t *) obj_info);
-	if (OBJ_BALL == what_obj) {
-		im_set_ball_loc(obj_info_raw);
-	} else if (OBJ_BARL == what_obj) {
-		im_set_barl_loc(obj_info_raw);
-	} else if (OBJ_BARR == what_obj) {
-		im_set_barr_loc(obj_info_raw);
-	}
+    setLOCRegister(obj_info);
+}
+
+/**
+ * Set the _LOC register of the provided object with the provided information.
+ *
+ * @param obj_info pointer to the struct with the object
+ */
+static void setLOCRegister(struct ObjInfo *obj_info) {
+    unsigned what_obj = obj_info->what_obj;
+    uint32_t obj_info_raw = *((uint32_t *) obj_info); // Only the first 32 bits are used on the _LOC registers
+    if (OBJ_BALL == what_obj) {
+        pmem_set_ball_loc(obj_info_raw);
+    } else if (OBJ_BARL == what_obj) {
+        pmem_set_barl_loc(obj_info_raw);
+    } else if (OBJ_BARR == what_obj) {
+        pmem_set_barr_loc(obj_info_raw);
+    }
 }

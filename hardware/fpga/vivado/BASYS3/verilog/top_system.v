@@ -22,9 +22,11 @@ module top_system(
             // NESCTRL
 	          input         nesctrl_ctrl1_q7,
 	          input         nesctrl_ctrl2_q7,
-            output [16-1:0]   nesctrl_ctrl1_data,
-	          output        nesctrl_pl,
-	          output        nesctrl_clk
+            output [8-1:0]   nesctrl_ctrl2_data,
+	          output        nesctrl_pl1,
+	          output        nesctrl_pl2,
+	          output        nesctrl_clk1,
+	          output        nesctrl_clk2
             );
       
          wire [9:0] 	   pixel_x;
@@ -79,18 +81,20 @@ module top_system(
       .pixel_x       (pixel_x),
       .pixel_y       (pixel_y),
 
-      // IM
-      .im_pixel_x        (pixel_x),
-      .im_pixel_y        (pixel_y),
-      .im_rgb            (rgb),
-      .im_sw_input       (im_sw_input),
+      // PMEM
+      .pmem_pixel_x        (pixel_x),
+      .pmem_pixel_y        (pixel_y),
+      .pmem_rgb            (rgb),
+      .pmem_sw_input       (pmem_sw_input),
       
       // NESCTRL
-      .nesctrl_ctrl1_data  (nesctrl_ctrl1_data),
-      .nesctrl_ctrl1_q7  (nesctrl_ctrl1_q7),
-      .nesctrl_ctrl2_q7  (nesctrl_ctrl2_q7),
-      .nesctrl_pl        (nesctrl_pl),
-      .nesctrl_clk       (nesctrl_clk)
+      .nesctrl_ctrl2_data  (nesctrl_ctrl2_data),
+      .nesctrl_ctrl1_q7    (nesctrl_ctrl1_q7),
+      .nesctrl_ctrl2_q7    (nesctrl_ctrl2_q7),
+      .nesctrl_pl1         (nesctrl_pl1),
+      .nesctrl_pl2         (nesctrl_pl2),
+      .nesctrl_clk1        (nesctrl_clk1),
+      .nesctrl_clk2        (nesctrl_clk2)
       );
 
 endmodule

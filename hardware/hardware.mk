@@ -30,8 +30,8 @@ include $(UART_DIR)/hardware/hardware.mk
 #VGA
 include $(VGA_DIR)/hardware/hardware.mk
 
-#IM
-include $(IM_DIR)/hardware/hardware.mk
+#PMEM
+include $(PMEM_DIR)/hardware/hardware.mk
 
 #TIMER
 include $(TIMER_DIR)/hardware/hardware.mk

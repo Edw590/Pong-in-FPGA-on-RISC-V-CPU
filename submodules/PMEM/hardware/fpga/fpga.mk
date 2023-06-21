@@ -1,5 +1,5 @@
-IM_DIR:=../../..
-include $(IM_DIR)/hardware/hardware.mk
+PMEM_DIR:=../../..
+include $(PMEM_DIR)/hardware/hardware.mk
 
 FPGA_VSRC=$(addprefix ../, $(VSRC) )
 FPGA_VHDR=$(addprefix ../, $(VHDR) )

@@ -36,7 +36,7 @@ INIT_MEM ?=1
 #PERIPHERAL LIST
 #must match respective submodule CORE_NAME in the core.mk file of the submodule
 #PERIPHERALS:=UART
-PERIPHERALS ?=UART VGA IM TIMER NESCTRL
+PERIPHERALS ?=UART VGA PMEM TIMER NESCTRL
 
 #RISC-V HARD MULTIPLIER AND DIVIDER INSTRUCTIONS
 USE_MUL_DIV ?=1
@@ -65,7 +65,7 @@ DOC ?= pb
 UART_HW_DIR:=$(UART_DIR)/hardware
 GPIO_HW_DIR:=$(GPIO_DIR)/hardware
 VGA_HW_DIR:=$(VGA_DIR)/hardware
-IM_HW_DIR:=$(IM_DIR)/hardware
+PMEM_HW_DIR:=$(PMEM_DIR)/hardware
 TIMER_HW_DIR:=$(TIMER_DIR)/hardware
 NESCTRL_HW_DIR:=$(NESCTRL_DIR)/hardware
 
@@ -95,7 +95,7 @@ MEM_DIR=$(ROOT_DIR)/submodules/MEM
 AXI_DIR=$(ROOT_DIR)/submodules/AXI
 GPIO_DIR=$(ROOT_DIR)/submodules/GPIO
 VGA_DIR=$(ROOT_DIR)/submodules/VGA
-IM_DIR=$(ROOT_DIR)/submodules/IM
+PMEM_DIR=$(ROOT_DIR)/submodules/PMEM
 TIMER_DIR=$(ROOT_DIR)/submodules/TIMER
 NESCTRL_DIR=$(ROOT_DIR)/submodules/NESCTRL
 
