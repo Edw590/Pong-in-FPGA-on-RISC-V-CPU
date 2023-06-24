@@ -20,6 +20,8 @@ software/*/*
 !software/firmware/firmware.S
 
 # Pong-specific files
+!software/firmware/CtrlUtils.c
+!software/firmware/CtrlUtils.h
 !software/firmware/GameUtils.c
 !software/firmware/GameUtils.h
 
