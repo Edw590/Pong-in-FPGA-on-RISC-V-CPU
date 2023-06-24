@@ -74,6 +74,9 @@ set_property PACKAGE_PIN U18 [get_ports {pmem_sw_input}]
 
 ## NES Controllers
 
+# The PULLTYPE PULLDOWN is required to prevent the data pin from floating, and in this case set it to 0 (useful for the
+# check for controller presence).
+
 # Controller 1
 set_property PACKAGE_PIN P18 [get_ports {nesctrl_clk1}]
   set_property IOSTANDARD LVCMOS33 [get_ports {nesctrl_clk1}]
@@ -81,6 +84,7 @@ set_property PACKAGE_PIN N17 [get_ports {nesctrl_pl1}]
   set_property IOSTANDARD LVCMOS33 [get_ports {nesctrl_pl1}]
 set_property PACKAGE_PIN M18 [get_ports {nesctrl_ctrl1_q7}]
   set_property IOSTANDARD LVCMOS33 [get_ports {nesctrl_ctrl1_q7}]
+  set_property PULLTYPE PULLDOWN [get_ports {nesctrl_ctrl1_q7}]
 
 # Controller 2
 set_property PACKAGE_PIN B16 [get_ports {nesctrl_clk2}]
@@ -89,6 +93,7 @@ set_property PACKAGE_PIN B15 [get_ports {nesctrl_pl2}]
   set_property IOSTANDARD LVCMOS33 [get_ports {nesctrl_pl2}]
 set_property PACKAGE_PIN A16 [get_ports {nesctrl_ctrl2_q7}]
   set_property IOSTANDARD LVCMOS33 [get_ports {nesctrl_ctrl2_q7}]
+  set_property PULLTYPE PULLDOWN [get_ports {nesctrl_ctrl2_q7}]
 
 set_property PACKAGE_PIN U16 [get_ports {nesctrl_ctrl2_data[0]}]				
 	set_property IOSTANDARD LVCMOS33 [get_ports {nesctrl_ctrl2_data[0]}]
