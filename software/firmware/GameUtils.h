@@ -46,9 +46,9 @@ struct ObjInfo {
 	// Velocity (pixels/frame) in the Y axis
     unsigned int vy:2;
 	// Sign of the velocity in the X axis (1 for positive, 0 for negative)
-    unsigned int vx_sign:1;
+    unsigned int vx_direction:1;
 	// Sign of the velocity in the Y axis (1 for positive, 0 for negative)
-    unsigned int vy_sign:1;
+    unsigned int vy_direction:1;
     // (Currently?) unused bits - keep the struct size at a multiple of 32 bits for correct alignment because of the
     // cast to uint32_t (try to prevent UB)
     unsigned int unused:24;
@@ -67,17 +67,26 @@ struct PlayerBarInfo {
 };
 
 /**
- * Prepare and reset the entire game.
+ * Prepares/resets the game.
  *
  * @param objs_info pointer to the objects array
  * @param players_bars_info pointer to the players' bars array
  */
-void resetGame(struct ObjInfo *objs_info, struct PlayerBarInfo *players_bars_info);
+void prepareGame(struct ObjInfo *objs_info, struct PlayerBarInfo *players_bars_info);
+
+
+/**
+ * Reset the ball with initial positions, random directions and original color.
+ *
+ * @param ball_info pointer to the ball's struct
+ */
+void resetBall(struct ObjInfo *ball_info);
 
 /**
  * Moves the ball and the 2 bars across the screen while simulating their physics.
  *
- * The ball will bounce off the bars and the screen's borders and no object can go past the borders.
+ * No object can go past the borders and the ball will bounce off the bars and the screen's borders and will get the
+ * color of the bar of the player that scored a point.
  *
  * @param ball_info pointer to the ball's struct
 */

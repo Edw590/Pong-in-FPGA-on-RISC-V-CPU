@@ -19,7 +19,7 @@ module iob_pmem # (
 		//additional inputs and outputs
 		`IOB_INPUT(pmem_pixel_x, 10),
 		`IOB_INPUT(pmem_pixel_y, 10),
-		`IOB_INPUT(pmem_sw_input, 32),
+		`IOB_INPUT(pmem_rst_btn, 1),
 
 		`IOB_OUTPUT(pmem_rgb, 12),
 		
@@ -113,7 +113,7 @@ module iob_pmem # (
 				 12'b0;
 
 	// Read Switch
-	assign PMEM_SW_INPUT_rdata = pmem_sw_input;
+	assign PMEM_RST_BTN_rdata = {7'b0, pmem_rst_btn};
 
 	// Outputs
 	assign pmem_rgb = rgb;

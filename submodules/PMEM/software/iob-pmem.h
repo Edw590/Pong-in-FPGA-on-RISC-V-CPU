@@ -13,4 +13,4 @@ void pmem_set_barl_loc(uint32_t value);
 void pmem_set_barr_loc(uint32_t value);
 
 // Get values from inputs
-uint32_t pmem_get_sw_input();
+uint32_t pmem_get_rst_btn();

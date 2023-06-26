@@ -1,8 +1,10 @@
 #include <stdbool.h>
 #include "printf.h"
+#include "iob-timer.h"
 #include "iob-pmem.h"
 #include "iob-nesctrl.h"
 #include "GameUtils.h"
+#include "Utils.h"
 
 // Must be the same as in iob-pmem.v (HL == Half Length)
 #define BALL_X_HLEN 3
@@ -16,20 +18,14 @@
 static void setObjCoords(struct ObjInfo *obj_info, int x, int y);
 static void setLOCRegister(struct ObjInfo *obj_info);
 
-void resetGame(struct ObjInfo *objs_info, struct PlayerBarInfo *players_bars_info) {
+void prepareGame(struct ObjInfo *objs_info, struct PlayerBarInfo *players_bars_info) {
 	// Set the object types
     objs_info[OBJ_BALL].what_obj = OBJ_BALL;
 	objs_info[OBJ_BARL].what_obj = OBJ_BARL;
 	objs_info[OBJ_BARR].what_obj = OBJ_BARR;
 	objs_info[OBJ_BALL].vx = SPEED_NORMAL;
 
-	// todo Set these randomly!
-	objs_info[OBJ_BALL].vy = SPEED_NORMAL;
-	objs_info[OBJ_BALL].vx_sign = X_SPEED_LEFT;
-	objs_info[OBJ_BALL].vy_sign = Y_SPEED_UP;
-
-	// Set the initial colors
-	objs_info[OBJ_BALL].rgb = 0xFFF; // White
+	// Set the initial bar colors
 	objs_info[OBJ_BARL].rgb = 0xF00; // Red
 	objs_info[OBJ_BARR].rgb = 0x0F0; // Green
 
@@ -44,44 +40,68 @@ void resetGame(struct ObjInfo *objs_info, struct PlayerBarInfo *players_bars_inf
     players_bars_info[PLAYER_2].bar_info = &objs_info[OBJ_BARR];
 	players_bars_info[PLAYER_2].get_ctrl_data = &nesctrl_get_ctrl2_data;
 
-	// Set the initial coordinates (ball in the middle, bars on the sides)
+	// Set the initial bars coordinates (on the sides)
+	setObjCoords(&objs_info[OBJ_BARL], 20, 239);
+	setObjCoords(&objs_info[OBJ_BARR], 620, 239);
+
+	resetBall(objs_info);
+}
+
+void resetBall(struct ObjInfo *ball_info) {
+	// Set the initial ball color
+	ball_info->rgb = 0xFFF; // White
+	setLOCRegister(ball_info);
+
+	// Set the initial ball velocity directions and Y speed randomly
+	ball_info->vy = timer_time_ms() % 2 == 0 ? SPEED_NORMAL : SPEED_NONE;
+	ball_info->vx_direction = timer_time_ms() % 3 == 0 ? X_SPEED_RIGHT : X_SPEED_LEFT;
+	ball_info->vy_direction = timer_time_ms() % 5 == 0 ? Y_SPEED_UP : Y_SPEED_DOWN;
+
+	// Set the initial ball coordinates (in the center)
 	// todo Set the ball's coordinates randomly! (in part - with a margin from the edges)
-    setObjCoords(&objs_info[OBJ_BALL], 320, 239);
-    setObjCoords(&objs_info[OBJ_BARL], 20, 239);
-    setObjCoords(&objs_info[OBJ_BARR], 620, 239);
+	setObjCoords(ball_info, 320, 239);
 }
 
 void moveObjs(struct ObjInfo *objs_info) {
 	struct ObjInfo *ball_info = &objs_info[OBJ_BALL];
 
-	int vx_sign_real = 0;
-	int vy_sign_real = 0;
+	int vx_sign = 0;
+	int vy_sign = 0;
     int x = 0;
     int y = 0;
 	// Last object on the loop must be the ball (what's below the loop expects its values on the variables above)
 	for (int i = OBJ_BARR; i >= OBJ_BALL; --i) {
 		struct ObjInfo *obj_info = &objs_info[i];
-		vx_sign_real = (X_SPEED_LEFT == obj_info->vx_sign) ? -1 : 1;
-		vy_sign_real = (Y_SPEED_UP == obj_info->vy_sign) ? -1 : 1;
+		vx_sign = (X_SPEED_LEFT == obj_info->vx_direction) ? -1 : 1;
+		vy_sign = (Y_SPEED_UP == obj_info->vy_direction) ? -1 : 1;
 		x = obj_info->x;
 		y = obj_info->y;
 
 		// Update location
-		x += vx_sign_real*obj_info->vx;
-		y += vy_sign_real*obj_info->vy;
+		x += vx_sign*obj_info->vx;
+		y += vy_sign*obj_info->vy;
         setObjCoords(obj_info, x, y);
 	}
 
     if ((y - BALL_Y_HLEN < 0) || (y + BALL_Y_HLEN > MAX_Y)) {
 		// Invert the sign of the Y velocity
-		ball_info->vy_sign = (vy_sign_real > 0) ? Y_SPEED_UP : Y_SPEED_DOWN;
+		ball_info->vy_direction = (vy_sign > 0) ? Y_SPEED_UP : Y_SPEED_DOWN;
 	}
 
-	// fixme Goal on player. Ball is not supposed to bounce off the side walls.
     if ((x - BALL_X_HLEN < 0) || (x + BALL_X_HLEN > MAX_X)) {
-		// Invert the sign of the X velocity
-		ball_info->vx_sign = (vx_sign_real > 0) ? X_SPEED_LEFT : X_SPEED_RIGHT;
-    }
+		unsigned int bar_color = 0;
+		if (x - BALL_X_HLEN < 0) {
+			bar_color = objs_info[OBJ_BARR].rgb;
+		} else {
+			bar_color = objs_info[OBJ_BARL].rgb;
+		}
+		objs_info[OBJ_BALL].rgb = bar_color;
+    	setLOCRegister(ball_info);
+
+		sleep(1000);
+
+		resetBall(ball_info);
+	}
 
 	// Check if the ball hits the paddles
 	int bar_hit = -1;
@@ -102,12 +122,12 @@ void moveObjs(struct ObjInfo *objs_info) {
 		// Don't just invert the sign - if the ball hits in the middle of the bottom pixels of the bars, it will never
 		// leave the bar unless the bar moves in the opposite direction.
 		if (OBJ_BARL == bar_hit) {
-            ball_info->vx_sign = X_SPEED_RIGHT;
+            ball_info->vx_direction = X_SPEED_RIGHT;
         } else {
-			ball_info->vx_sign = X_SPEED_LEFT;
+			ball_info->vx_direction = X_SPEED_LEFT;
 		}
 
-		if (ball_info->vy_sign == objs_info[bar_hit].vy_sign && SPEED_FAST == objs_info[bar_hit].vy) {
+		if (ball_info->vy_direction == objs_info[bar_hit].vy_direction && SPEED_FAST == objs_info[bar_hit].vy) {
 			ball_info->vy = SPEED_FAST;
 			ball_info->vx = SPEED_FAST;
 		} else {
@@ -115,9 +135,9 @@ void moveObjs(struct ObjInfo *objs_info) {
 			ball_info->vx = SPEED_NORMAL;
 		}
 		if (y >= min_bar_y - BALL_Y_HLEN && y <= one_third_bar_y) {
-			ball_info->vy_sign = Y_SPEED_UP;
+			ball_info->vy_direction = Y_SPEED_UP;
 		} else if (y >= two_third_bar_y && y <= max_bar_y + BALL_Y_HLEN) {
-			ball_info->vy_sign = Y_SPEED_DOWN;
+			ball_info->vy_direction = Y_SPEED_DOWN;
 		} else {
 			ball_info->vy = SPEED_NONE;
 		}

@@ -8,7 +8,7 @@
       .rst     (rst),
 
       // Registers interface
-      .pmem_sw_input       (pmem_sw_input),
+      .pmem_rst_btn        (pmem_rst_btn),
       .pmem_pixel_x        (pmem_pixel_x),
       .pmem_pixel_y        (pmem_pixel_y),
       .pmem_rgb            (pmem_rgb),
