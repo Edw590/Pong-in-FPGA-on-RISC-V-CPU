@@ -16,13 +16,14 @@ module top_system(
             output [3:0] Green,
             output [3:0] Blue,
 
-            // IM
-	          input         im_sw_input,
+            // PMEM
+	          input         pmem_rst_btn,
 
             // NESCTRL
 	          input         nesctrl_ctrl1_q7,
 	          input         nesctrl_ctrl2_q7,
-            output [8-1:0]   nesctrl_ctrl2_data,
+            //output [8-1:0]   nesctrl_ctrl1_data,
+            //output [8-1:0]   nesctrl_ctrl2_data,
 	          output        nesctrl_pl1,
 	          output        nesctrl_pl2,
 	          output        nesctrl_clk1,
@@ -85,10 +86,11 @@ module top_system(
       .pmem_pixel_x        (pixel_x),
       .pmem_pixel_y        (pixel_y),
       .pmem_rgb            (rgb),
-      .pmem_sw_input       (pmem_sw_input),
+      .pmem_rst_btn        (pmem_rst_btn),
       
       // NESCTRL
-      .nesctrl_ctrl2_data  (nesctrl_ctrl2_data),
+      //.nesctrl_ctrl1_data  (nesctrl_ctrl1_data),
+      //.nesctrl_ctrl2_data  (nesctrl_ctrl2_data),
       .nesctrl_ctrl1_q7    (nesctrl_ctrl1_q7),
       .nesctrl_ctrl2_q7    (nesctrl_ctrl2_q7),
       .nesctrl_pl1         (nesctrl_pl1),

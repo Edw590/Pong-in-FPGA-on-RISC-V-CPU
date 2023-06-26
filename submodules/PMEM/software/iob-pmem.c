@@ -21,6 +21,6 @@ void pmem_set_barr_loc(uint32_t value) {
 }
 
 // Get values from inputs
-uint32_t pmem_get_sw_input() {
-	return IOB_PMEM_GET_SW_INPUT();
+uint32_t pmem_get_rst_btn() {
+	return IOB_PMEM_GET_RST_BTN();
 }

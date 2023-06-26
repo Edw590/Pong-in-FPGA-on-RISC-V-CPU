@@ -3,4 +3,4 @@
  *
  * @param ms the number of milliseconds to sleep
  */
-void sleep(int ms);
+void sleep(uint64_t ms);

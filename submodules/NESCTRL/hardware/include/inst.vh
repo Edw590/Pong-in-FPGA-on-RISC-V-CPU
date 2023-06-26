@@ -14,6 +14,7 @@
       .nesctrl_pl2          (nesctrl_pl2),
       .nesctrl_clk1         (nesctrl_clk1),
       .nesctrl_clk2         (nesctrl_clk2),
+      .nesctrl_ctrl1_data   (nesctrl_ctrl1_data),
       .nesctrl_ctrl2_data   (nesctrl_ctrl2_data),
 
       // CPU interface

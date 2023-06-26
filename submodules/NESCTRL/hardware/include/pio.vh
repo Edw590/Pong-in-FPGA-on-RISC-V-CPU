@@ -5,4 +5,5 @@
    output            nesctrl_pl2,
    output            nesctrl_clk1,
    output            nesctrl_clk2,
+   output [8-1:0]    nesctrl_ctrl1_data,
    output [8-1:0]    nesctrl_ctrl2_data,

@@ -34,6 +34,7 @@ module iob_nesctrl # (
 		`IOB_OUTPUT(nesctrl_pl2, 1),
 		`IOB_OUTPUT(nesctrl_clk1, 1),
 		`IOB_OUTPUT(nesctrl_clk2, 1),
+		`IOB_OUTPUT(nesctrl_ctrl1_data, 8),
 		`IOB_OUTPUT(nesctrl_ctrl2_data, 8),
 
 		`include "iob_gen_if.vh"
@@ -101,6 +102,7 @@ module iob_nesctrl # (
 
 
 	// Outputs
+	assign nesctrl_ctrl1_data = ctrl1_data;
 	assign nesctrl_ctrl2_data = ctrl2_data;
 	assign nesctrl_pl1 = pl;
 	assign nesctrl_pl2 = pl;
