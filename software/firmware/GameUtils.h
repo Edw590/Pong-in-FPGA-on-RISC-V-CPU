@@ -75,7 +75,7 @@ struct PlayerBarInfo {
 void resetGame(struct ObjInfo *objs_info, struct PlayerBarInfo *players_bars_info);
 
 /**
- * Moves the ball and the 2 bars across the screen while simulating its physics.
+ * Moves the ball and the 2 bars across the screen while simulating their physics.
  *
  * The ball will bounce off the bars and the screen's borders and no object can go past the borders.
  *

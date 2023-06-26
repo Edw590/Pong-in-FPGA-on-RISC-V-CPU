@@ -27,13 +27,12 @@ int main(void) {
 	//goto skip;
 
 	while (true) {
-		// todo Explcar Pull down - porque é que os bits ficam a 0 quando o comando é desligado?
-		if (pmem_get_sw_input() != 0) {
-			// If the button U18 is pressed, reset the game
-			// For tests only (doesn't work for some reason. The screen just gets black)
-		
-			resetGame(objs_info, players_bars_info);
-		}
+		//if (pmem_get_sw_input() != 0) {
+		//	// If the button U18 is pressed, reset the game
+		//	// For tests only (doesn't work for some reason. The screen just gets black)
+		//
+		//	resetGame(objs_info, players_bars_info);
+		//}
 
 		for (int i = 0; i < NUM_PLAYERS; ++i) {
 			uint8_t ctrl_data = players_bars_info[i].get_ctrl_data();
