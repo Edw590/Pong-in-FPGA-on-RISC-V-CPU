@@ -1,4 +1,4 @@
-# Pong in Basys 3 FPGA Dev Board
+# Pong in Basys 3 FPGA Dev Board 
 Pong game with NES controllers for the Basys 3 Digilent FPGA Dev Board, coded in Verilog and C with IOb-SoC as base
 
 ## Pictures
