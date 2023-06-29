@@ -19,7 +19,7 @@ As a start [IOb-SoC](https://github.com/IObundle/iob-soc) (by [IObundle](https:/
 
 After this, a module was created to control the VGA interface to give it the information it needed to print things to the screen, the PMEM module - "Pseudo-Memory". It's not a memory, it calculates in real-time what color to give to each coordinate that the VGA interface requires (since it's always scanning the screen and asking for every coordinate). So no memory was needed. At most 3 registers to store positions and colors and macros to tell the height and width of the 3 objects.
 
-The NES controllers interface also had to be created, to send and receive data to/from them - the NESCTRL modules (NES controllers). Was the most interesting part to make of the whole project (involved checking the datasheet and using an oscilloscope).
+The NES controllers interface also had to be created, to send and receive data to/from them - the NESCTRL module (NES controllers). Was the most interesting part to make of the whole project (involved checking the datasheet of a component (HEF4021B) and using the oscilloscope).
 
 And with all this, the rest was done in software, while interfacing with the hardware to give (to the VGA interface controller) and retrieve (from the NESCTRL) information - begins in the firmware.c file (with other .c/.h files in the mix too).
 
