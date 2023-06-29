@@ -2,5 +2,5 @@
 hardware/fpga/vivado/BASYS3/top_system.xdc linguist-vendored=false
 software/firmware/*.c linguist-vendored=false
 software/firmware/*.h linguist-vendored=false
-submodules/NESCTRL/** linguist-vendored=false
-submodules/PMEM/** linguist-vendored=false
+submodules/NESCTRL/hardware/src/** linguist-vendored=false
+submodules/PMEM/hardware/src/** linguist-vendored=false
