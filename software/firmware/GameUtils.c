@@ -23,13 +23,11 @@ void prepareGame(struct ObjInfo *objs_info, struct PlayerBarInfo *players_bars_i
     objs_info[OBJ_BALL].what_obj = OBJ_BALL;
 	objs_info[OBJ_BARL].what_obj = OBJ_BARL;
 	objs_info[OBJ_BARR].what_obj = OBJ_BARR;
-	objs_info[OBJ_BALL].vx = SPEED_NORMAL;
 
 	// Set the initial bar colors
 	objs_info[OBJ_BARL].rgb = 0xF00; // Red
 	objs_info[OBJ_BARR].rgb = 0x0F0; // Green
 
-    setLOCRegister(&objs_info[OBJ_BALL]);
     setLOCRegister(&objs_info[OBJ_BARL]);
     setLOCRegister(&objs_info[OBJ_BARR]);
 
@@ -52,6 +50,7 @@ void resetBall(struct ObjInfo *ball_info) {
 	ball_info->rgb = 0xFFF; // White
 	setLOCRegister(ball_info);
 
+	ball_info->vx = SPEED_NORMAL;
 	// Set the initial ball velocity directions and Y speed randomly
 	ball_info->vy = timer_time_ms() % 2 == 0 ? SPEED_NORMAL : SPEED_NONE;
 	ball_info->vx_direction = timer_time_ms() % 3 == 0 ? X_SPEED_RIGHT : X_SPEED_LEFT;
