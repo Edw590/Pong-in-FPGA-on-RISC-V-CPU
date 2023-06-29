@@ -1,5 +1,5 @@
 # Pong in Basys 3 FPGA Dev Board
-Pong game with NES controllers for the Basys 3 Digilent FPGA Dev Board, coded in Verilog and C with IOb-SoC as base
+Pong game with NES controller clones for the Digilent FPGA Dev Board Basys 3, coded in Verilog and C with IOb-SoC as base
 
 ## Pictures
 <img src="Pictures/Game picture.jpg" width="500"><img src="Pictures/Full set.jpg" width="500">
@@ -7,7 +7,7 @@ Pong game with NES controllers for the Basys 3 Digilent FPGA Dev Board, coded in
 ## Introduction
 This was a project for the Integrator Project course in the Electrical and Computer Engineering degree, coded in 2023.
 
-It's the Pong arcade game, but coded in C and with Verilog helping interface the software with (and controlling) the hardware and with the [IOb-SoC](https://github.com/IObundle/iob-soc) platform/System-On-Chip template as base. The game is fully programmed in C, but the VGA interface, the interface controller and the Nintendo Entertainment System (NES) controllers interface are in Verilog (had to be - hardware stuff). It's not as complete as it could be, but it still got to a cool point!
+It's the Pong arcade game, but coded in C and with Verilog helping interface the software with (and controlling) the hardware and with the [IOb-SoC](https://github.com/IObundle/iob-soc) platform/System-On-Chip template as base. The game is fully programmed in C, but the VGA interface controller and the Nintendo Entertainment System (NES) controllers interface are in Verilog (had to be - hardware stuff). It's not as complete as it could be, but it still got to a cool point!
 
 ## How the game works
 - The ball starts in a random direction (except the first time - it uses the internal clock of the board, which is always the same when the game starts, and then gets random because of human interaction). As supposed whenever it hits the paddles, it's reflected - though only in 45º up, 180º back or 45º down (no complete angles, only these 3).
@@ -19,7 +19,7 @@ As a start [IOb-SoC](https://github.com/IObundle/iob-soc) (by [IObundle](https:/
 
 After this, a module was created to control the VGA interface to give it the information it needed to print things to the screen, the PMEM module - "Pseudo-Memory". It's not a memory, it calculates in real-time what color to give to each coordinate that the VGA interface requires (since it's always scanning the screen and asking for every coordinate). So no memory was needed. At most 3 registers to store positions and colors and macros to tell the height and width of the 3 objects.
 
-The NES controllers interface also had to be created, to send and receive data to/from them - the NESCTRL module (NES controllers). Was the most interesting part to make of the whole project (involved checking the datasheet of a component (HEF4021B) and using the oscilloscope). Note: the first 6 commits to this module are in [this repository](https://github.com/Edw590/iob-nesctrl).
+The NES controllers interface also had to be created, to send and receive data to/from them - the NESCTRL module (NES controllers). Was the most interesting part to make of the whole project (involved checking the datasheet of a component (HEF4021B - the one used inside the clones) and using the oscilloscope). Note: the first 6 commits to this module are in [this repository](https://github.com/Edw590/iob-nesctrl).
 
 And with all this, the rest was done in software, while interfacing with the hardware to give (to the VGA interface controller) and retrieve (from the NESCTRL) information - begins in the firmware.c file (with other .c/.h files in the mix too).
 
