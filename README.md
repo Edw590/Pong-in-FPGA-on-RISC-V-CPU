@@ -24,7 +24,7 @@ The NES controllers interface also had to be created, to send and receive data t
 And with all this, the rest was done in software, while interfacing with the hardware to give (to the VGA interface controller) and retrieve (from the NESCTRL) information - begins in the firmware.c file (with other .c/.h files in the mix too).
 
 ## Developer note
-Don't use `make all` - that command exists *only* (in this project specifically) for CLion to detect and understand *part* of the project and doesn't do anything useful I think (maybe compile the firmware? I don't remember. But it's not supposed to be used at all) - VS Code was used as main editor. CLion only to check if there were mistakes in the code (it couldn't understand the project decently to have it as main IDE, and VS Code could). Use the other Makefile commands. `make all`, at edit to add new files to it, but not to compile the project.
+Don't use `make all` - that command exists *only* (in this project specifically) for CLion to detect and understand *part* of the project and doesn't do anything useful I think (maybe compile the firmware? I don't remember. But it's not supposed to be used at all) - VS Code was used as main editor. CLion only to check if there were mistakes in the code (it couldn't understand the project decently to have it as main IDE, and VS Code could). Use the other Makefile commands. `make all`, at most edit to add new files to it, but not to compile the project.
 
 ## License
 This project is licensed under the MIT License.
